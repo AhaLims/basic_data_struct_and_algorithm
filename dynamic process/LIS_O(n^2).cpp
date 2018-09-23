@@ -16,7 +16,8 @@ void LIS(int & maxLen, int & index)
 		sub_number[i] = 1;
 		for (int j = 0; j < i; j++)
 		{
-			if (number[j] < number[i])sub_number[i] = sub_number[j] + 1;//state transition equation
+			iif(number[j] < number[i] && sub_number[i] < sub_number[j] + 1)
+				sub_number[i] = sub_number[j] + 1;//state transition equation
 		}
 		if (sub_number[i] > maxLen)
 		{
