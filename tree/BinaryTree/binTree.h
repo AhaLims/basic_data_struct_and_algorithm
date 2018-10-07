@@ -22,17 +22,16 @@ public:
 	T& element() { return Element; };
 	bool ifLeaf();
 	void visit();
-	//void preorder(binNode<T> *);
-	//void postorder(binNode<T> *);
-	//void inorder(binNode<T> *);
-	void preorder();
-	void postorder();
-	void inorder();
+	void preorder(binNode <T> * );
+	void postorder(binNode <T> *);
+	void inorder(binNode <T> *);
 	void path();
 //private:
 	binNode * leftChild, * rightChild, * father;
 	T Element;
 	int level;//root is level 0
+
+	//要不要为了这题 加个 string child;
 	//height = level + 1
 	//可以有父亲指针 binNode*father;
 };
@@ -59,10 +58,13 @@ public:
 	BST(const T&);
 	BST() ;
 	~BST();
+	binNode<T> * deleteMin(binNode<T> *);///////////
+	binNode<T> * getMin(binNode<T> *);////////////
+	binNode<T> * removeElement(binNode<T> *，const T &);//////////////
 	binNode<T> * insert(const T &,binNode<T> * );//if this element is bigger ,insert to left
 	binNode<T> * getRoot() { return root; };
-	void preorder() { root->preorder(); };
-	bool FindElement(binNode<T> *,const T);
+	void preorder() { root->preorder(); }const;
+	bool FindElement(binNode<T> *,const T)const;
 private:
 	binNode<T> * root;
 

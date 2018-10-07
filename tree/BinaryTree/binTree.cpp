@@ -90,35 +90,30 @@ void binNode<T>::visit()
 }
 
 template<typename T>
-void binNode<T>::preorder()
+void binNode<T>::preorder(binNode <T> * r)
 {
-	visit();
-	if (leftChild != nullptr)
-	{
-		//cout << "leftchild now\n";
-		leftChild->preorder();
-	}
-	if (rightChild != nullptr)
-	{
-		//cout << "right child now \n";
-		rightChild->preorder();
-	}
+	if (r == nullptr) return;
+	r->visit();
+	preorder(r->leftChild);
+	preorder(r->rightChild);
 }
 
 template<typename T>
-void binNode<T>::postorder()
+void binNode<T>::postorder(binNode <T> * r)
 {
-	if (leftChild != nullptr)leftChild->postorder();
-	if (rightChild != nullptr) rightChild->postorder();
-	visit();
+	if (r == nullptr) return;
+	postorder(r->leftChild);
+	postorder(r->rightChild);
+	r->visit();
 }
 
 template<typename T>
-void binNode<T>::inorder()
+void binNode<T>::inorder(binNode <T> * r)
 {
-	if (leftChild != nullptr)leftChild->inorder();
-	visit();
-	if (rightChild != nullptr) rightChild->inorder();
+	if (r == nullptr) return;
+	inorder(r->leftChild);
+	r->visit();
+	inorder(r->rightChild);
 }
 
 template<typename T>
@@ -160,6 +155,47 @@ BST<T>::~BST()
 	delete root;
 }
 
+template<typename T>
+binNode<T> * BST<T>::deleteMin(binNode <T> * rt)//???可是没有实际上的delete啊...
+{
+	if (rt->left == nullptr)return rt->right;
+	else
+	{
+		rt->setLeft(deleteMin(rt->left()));
+		return rt;
+	}
+}
+
+template<typename T>
+binNode<T> * BST<T>::getMin(binNode<T> * rt)
+{
+	if (rt->left == nullptr) return rt;
+	else return getMin(rt->left);//this function is continously called.
+	//and we can get the element located on the leftest
+}
+
+template<typename T>
+binNode<T> * BST<T>::removeElement(binNode<T> * e,const T & k)
+{
+	//这时候应该需要父节点吧？！
+	//if (e == nullptr) return nullptr;
+	if (e == nullptr) return nullptr;//报错 应该输入声明？？？
+	else if (k < e->element())
+	{
+		//e -> set
+	}
+	else if (k < e->element())
+	{
+		
+	}
+	else
+	{
+
+	}
+}
+
+
+
 //bigger element is stored in the left child
 template<typename T>
 binNode<T>* BST<T>::insert(const T & e,binNode<T> * r)//not recursion version
@@ -167,7 +203,7 @@ binNode<T>* BST<T>::insert(const T & e,binNode<T> * r)//not recursion version
 	
 	while (r != nullptr)
 	{
-		if (r->element() < e)
+		if (r->element() < e)//规则 左节点必定是严格小于父节点的，右节点>=父节点
 		{
 			if (r->leftChild != nullptr)r = r->leftChild;
 			else
@@ -206,7 +242,7 @@ binNode<T>* BST<T>::insert(const T & e,binNode<T> * r)//not recursion version
 }
 
 template<typename T>
-bool BST<T>::FindElement(binNode<T> * r, const T key)
+bool BST<T>::FindElement(binNode<T> * r, const T key)const
 {
 	if (r == nullptr)return false;
 	if (r->element() == key) return true;
@@ -214,72 +250,150 @@ bool BST<T>::FindElement(binNode<T> * r, const T key)
 	else return FindElement(r->rightChild, key);
 }
 
-int main()
+//int main()
+//{
+//	int order,element;
+//	BST<int> tree(1);
+//	while (true)
+//	{
+//		cout << "enter order\n";
+//		cout << "1.insert an element\n";
+//		cout << "2.see the tree\n";
+//		cout << "3.find a certain element\n";
+//		cin >> order;
+//		switch (order)
+//		{
+//		case 1:
+//			cin >> element;
+//			tree.insert(element,tree.getRoot());
+//			break;
+//		case 2:
+//			tree.preorder();
+//			cout << endl;
+//			break;
+//		case 3:
+//			cout << "please enter this element\n";
+//			cin >> element;
+//			if (tree.FindElement(tree.getRoot(), element))cout << "find\n";
+//			else cout << "unfind\n";
+//		}
+//	}
+//	/*while (true)
+//	{
+//		cout << "enter order\n";
+//		cout << "1.insert in its left\n";
+//		cout << "2.insert in its right\n";
+//		cout << "3.go to left\n";
+//		cout << "4.go to right\n";
+//		cout << "5.see this tree\n";
+//		cin >> order;
+//		switch (order)
+//		{
+//		case 1:
+//			cout << "enter element\n";
+//			cin >> element;
+//			now->setLeft(element);
+//			break;
+//		case 2:
+//			cout << "enter element\n";
+//			cin >> element;
+//			now->setRight(element);
+//			break;
+//		case 3:
+//			now = root.leftChild;
+//			break;
+//		case 4:
+//			now = root.rightChild;
+//		case 5:
+//			cout << "preorder:\n";
+//			root.preorder();
+//			cout << endl;
+//			cout << "inorder:\n";
+//			root.inorder();
+//			cout << endl;
+//			cout << "postorder:\n";
+//			root.postorder();
+//			cout << endl;
+//			break;
+//
+//		}
+//	}*/
+//}
+//给出前序  中序遍历
+
+
+#include<iostream>
+using namespace std;
+#include<string>
+//return position
+
+
+bool find(string s, char t,int &pos) //s string   t target
 {
-	int order,element;
-	BST<int> tree(1);
-	while (true)
+	int len = s.length();
+	for (int i = 0; i < len; i++)
 	{
-		cout << "enter order\n";
-		cout << "1.insert an element\n";
-		cout << "2.see the tree\n";
-		cout << "3.find a certain element\n";
-		cin >> order;
-		switch (order)
+		if (s[i] == t)
 		{
-		case 1:
-			cin >> element;
-			tree.insert(element,tree.getRoot());
-			break;
-		case 2:
-			tree.preorder();
-			cout << endl;
-			break;
-		case 3:
-			cout << "please enter this element\n";
-			cin >> element;
-			if (tree.FindElement(tree.getRoot(), element))cout << "find\n";
-			else cout << "unfind\n";
+			pos = i;
+			return true;
 		}
 	}
-	/*while (true)
-	{
-		cout << "enter order\n";
-		cout << "1.insert in its left\n";
-		cout << "2.insert in its right\n";
-		cout << "3.go to left\n";
-		cout << "4.go to right\n";
-		cout << "5.see this tree\n";
-		cin >> order;
-		switch (order)
-		{
-		case 1:
-			cout << "enter element\n";
-			cin >> element;
-			now->setLeft(element);
-			break;
-		case 2:
-			cout << "enter element\n";
-			cin >> element;
-			now->setRight(element);
-			break;
-		case 3:
-			now = root.leftChild;
-			break;
-		case 4:
-			now = root.rightChild;
-		case 5:
-			cout << "preorder:\n";
-			root.preorder();
-			cout << endl;
-			cout << "inorder:\n";
-			root.inorder();
-			cout << endl;
-			cout << "postorder:\n";
-			root.postorder();
-			cout << endl;
-			break;
-
-		}
-	}*/
+	return false;
 }
+
+//返回当前的根节点
+binNode<char> * buildTree(binNode<char> * father,string left,string right,string pre)
+{
+	if (left.length() <= 1)
+	{
+		if (left.length() == 1)
+		{
+			father->leftChild = new binNode<char>(left[0]);
+		}
+	}
+	else
+	{
+		int pos = 0;
+		while (!find(left,pre[pos],pos))
+		{
+			pos++;
+		}
+		buildTree(father, left.substr(0, pos), left.substr(pos + 1, left.length()), pre);
+
+			
+	}
+	if (right.length() <= 1)
+	{
+		if (right.length() == 1) father->rightChild = new binNode<char>(right[0]);
+	}
+	else
+	{
+		int pos = 0;
+		while (!find(right, pre[pos], pos))
+		{
+			pos++;
+		}
+		buildTree(father, right.substr(0, pos), right.substr(pos + 1, right.length());
+	}
+
+	return father;
+}
+
+int main()
+{
+	string pre, in;
+	cin >> pre >> in;
+	binNode<char> *root;
+	root = new binNode<char>(pre[0]);
+	int pos;
+	find(in, pre[0],pos);
+	buildTree(root, in.substr(0, pos), in.substr(pos + 1, in.length()),pre);
+
+
+
+
+	delete root;
+}
+
+
